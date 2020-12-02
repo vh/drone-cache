@@ -228,7 +228,7 @@ func main() {
 		&cli.StringFlag{
 			Name:    "backend, b",
 			Usage:   "cache backend to use in plugin (s3, filesystem, sftp, azure, gcs)",
-			Value:   backend.S3,
+			Value:   backend.GCS,
 			EnvVars: []string{"PLUGIN_BACKEND"},
 		},
 		&cli.StringSliceFlag{
