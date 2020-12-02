@@ -2,11 +2,16 @@
 FROM golang:1.14.4-alpine3.12 AS builder
 RUN apk add --update --no-cache ca-certificates tzdata && update-ca-certificates
 
+WORKDIR /app
+COPY . /app
+
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o drone-cache .
+
 FROM scratch as runner
 
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY drone-cache /bin/drone-cache
+COPY --from=builder /app/drone-cache /bin/drone-cache
 
 LABEL vendor="meltwater" \
     name="drone-cache" \
